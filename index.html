@@ -1,0 +1,245 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2761
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs24 \cf0 \expnd0\expndtw0\kerning0
+<!DOCTYPE html>\
+<html lang="en">\
+<head>\
+  <meta charset="UTF-8">\
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">\
+  <title>Moral Decision Quiz</title>\
+  <style>\
+    body \{\
+      font-family: Arial, sans-serif;\
+      background-color: #f7f9fc;\
+      margin: 0;\
+      padding: 0;\
+      display: flex;\
+      justify-content: center;\
+      align-items: center;\
+      height: 100vh;\
+      flex-direction: column;\
+    \}\
+\
+    #start-screen, #quiz-container \{\
+      display: none;\
+    \}\
+\
+    #start-screen \{\
+      text-align: center;\
+    \}\
+\
+    #quiz-container \{\
+      background-color: #ffffff;\
+      border-radius: 10px;\
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);\
+      padding: 20px;\
+      max-width: 400px;\
+      width: 100%;\
+      text-align: center;\
+    \}\
+\
+    #quiz-content \{\
+      background: linear-gradient(135deg, #e2e2e2, #ffffff);\
+      border-radius: 10px;\
+      padding: 20px;\
+    \}\
+\
+    h1 \{\
+      color: #ff6f61;\
+    \}\
+\
+    .question \{\
+      font-size: 18px;\
+      margin-bottom: 20px;\
+    \}\
+\
+    .button-container button \{\
+      background-color: #ff6f61;\
+      border: none;\
+      color: white;\
+      padding: 10px 20px;\
+      border-radius: 5px;\
+      cursor: pointer;\
+      font-size: 16px;\
+      margin: 5px;\
+    \}\
+\
+    .button-container button:hover \{\
+      background-color: #ff8c7a;\
+    \}\
+\
+    #result \{\
+      font-size: 20px;\
+      font-weight: bold;\
+      color: #333;\
+      margin-top: 20px;\
+    \}\
+\
+    #progress-bar \{\
+      height: 10px;\
+      background-color: #e0e0e0;\
+      border-radius: 5px;\
+      overflow: hidden;\
+      margin-bottom: 20px;\
+    \}\
+\
+    #progress-fill \{\
+      height: 100%;\
+      width: 0;\
+      background-color: #ff6f61;\
+      transition: width 0.3s;\
+    \}\
+\
+    #start-screen button \{\
+      background-color: #ff6f61;\
+      color: white;\
+      border: none;\
+      padding: 15px 30px;\
+      border-radius: 5px;\
+      cursor: pointer;\
+      font-size: 18px;\
+    \}\
+\
+    #start-screen button:hover \{\
+      background-color: #ff8c7a;\
+    \}\
+\
+    body.very-bad \{\
+      background-color: #8B0000;\
+    \}\
+\
+    body.bad \{\
+      background-color: #FF0000;\
+    \}\
+\
+    body.slightly-bad \{\
+      background-color: #FF6347;\
+    \}\
+\
+    body.slightly-good \{\
+      background-color: #90EE90;\
+    \}\
+\
+    body.good \{\
+      background-color: #32CD32;\
+    \}\
+\
+    body.very-good \{\
+      background-color: #006400;\
+    \}\
+  </style>\
+</head>\
+<body>\
+  <!-- Start Screen -->\
+  <div id="start-screen">\
+    <h1>Moral Decision Tool</h1>\
+    <p>Welcome to the Moral Decision Tool. Answer the following questions to evaluate your decision.</p>\
+    <button onclick="startQuiz()">Begin Quiz</button>\
+  </div>\
+\
+  <!-- Quiz Container -->\
+  <div id="quiz-container">\
+    <div id="progress-bar">\
+      <div id="progress-fill"></div>\
+    </div>\
+\
+    <div id="quiz-content">\
+      <div id="question" class="question"></div>\
+      <div class="button-container">\
+        <button onclick="answer(true)">Yes</button>\
+        <button onclick="answer(false)">No</button>\
+      </div>\
+    </div>\
+\
+    <div id="result"></div>\
+  </div>\
+\
+  <script>\
+    const questions = [\
+      "Does this action harm anyone?",\
+      "Does it align with my personal values?",\
+      "Will this action benefit others?",\
+      "Does this decision make me feel good?",\
+      "Would I be proud if others knew about this decision?",\
+      "Does this decision respect others' rights?",\
+      "Is this decision consistent with the law?",\
+      "Am I putting others first?",\
+      "Would I feel comfortable explaining this decision to a child?",\
+      "Is this action reversible if things go wrong?",\
+      "Am I thinking long-term?"\
+    ];\
+\
+    let currentQuestion = 0;\
+    let yesCount = 0;\
+\
+    const questionEl = document.getElementById("question");\
+    const resultEl = document.getElementById("result");\
+    const progressFillEl = document.getElementById("progress-fill");\
+    const startScreenEl = document.getElementById("start-screen");\
+    const quizContainerEl = document.getElementById("quiz-container");\
+    const quizContentEl = document.getElementById("quiz-content");\
+\
+    function startQuiz() \{\
+      startScreenEl.style.display = "none";\
+      quizContainerEl.style.display = "block";\
+      updateQuestion();\
+    \}\
+\
+    function updateQuestion() \{\
+      questionEl.textContent = questions[currentQuestion];\
+      const progress = (currentQuestion / questions.length) * 100;\
+      progressFillEl.style.width = progress + "%";\
+    \}\
+\
+    function answer(isYes) \{\
+      if (isYes) yesCount++;\
+\
+      currentQuestion++;\
+\
+      if (currentQuestion < questions.length) \{\
+        updateQuestion();\
+      \} else \{\
+        showResult();\
+      \}\
+    \}\
+\
+    function showResult() \{\
+      quizContentEl.style.display = "none";\
+      progressFillEl.style.width = "100%";\
+      const score = (yesCount / questions.length) * 100;\
+\
+      let resultClass = "";\
+      if (score <= 16) \{\
+        resultEl.textContent = "Very Bad Decision";\
+        resultClass = "very-bad";\
+      \} else if (score <= 33) \{\
+        resultEl.textContent = "Bad Decision";\
+        resultClass = "bad";\
+      \} else if (score <= 50) \{\
+        resultEl.textContent = "Slightly Bad Decision";\
+        resultClass = "slightly-bad";\
+      \} else if (score <= 66) \{\
+        resultEl.textContent = "Slightly Good Decision";\
+        resultClass = "slightly-good";\
+      \} else if (score <= 83) \{\
+        resultEl.textContent = "Good Decision";\
+        resultClass = "good";\
+      \} else \{\
+        resultEl.textContent = "Very Good Decision";\
+        resultClass = "very-good";\
+      \}\
+\
+      document.body.className = resultClass;\
+    \}\
+\
+    // Initialize start screen\
+    document.getElementById("start-screen").style.display = "block";\
+  </script>\
+</body>\
+</html>}
